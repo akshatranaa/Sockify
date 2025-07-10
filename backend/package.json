@@ -4,8 +4,8 @@
   "description": "WebSocket Chat Backend",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.ts",
-    "dev": "nodemon src/index.ts",
+    "start": "ts-node src/index.ts",
+    "serve": "node dist/src/index.js",
     "build": "tsc"
   },
   "dependencies": {

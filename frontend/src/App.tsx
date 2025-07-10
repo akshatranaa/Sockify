@@ -55,7 +55,6 @@ const ChatApp = () => {
     };
 
     websocket.onerror = (error) => {
-      console.error('WebSocket error:', error);
     };
   };
 

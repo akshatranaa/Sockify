@@ -7,7 +7,6 @@ import { IncomingMessage, SupportedMessage } from "./messages/incomingMessages";
 import { InMemoryStore } from "./store/InMemoryStore";
 
 const server = http.createServer(function(request: any, response: any) {
-    console.log((new Date()) + ' Received request for ' + request.url);
     response.writeHead(404);
     response.end();
 });
@@ -20,7 +19,6 @@ const store = new InMemoryStore();
 const PORT = process.env.PORT || 8080;
 
 server.listen(PORT, function() {
-    console.log((new Date()) + ' Server is listening on port ' + PORT);
 });
 
  const wsServer = new WebSocketServer({
@@ -33,17 +31,14 @@ function originIsAllowed(origin: string) {
 }
 
 wsServer.on('request', function(request) {
-    console.log("inside connect");
 
     if (!originIsAllowed(request.origin)) {
       // Make sure we only accept requests from an allowed origin
       request.reject();
-      console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
       return;
     }
     
     var connection = request.accept('echo-protocol', request.origin);
-    console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
 
         // Todo add rate limitting logic here 
@@ -68,7 +63,7 @@ function messageHandler(ws: connection, message: IncomingMessage) {
         const user = userManager.getUser(payload.roomId, payload.userId);
 
         if (!user) {
-            console.error("User not found in the db");
+            .error("User not found in the db");
             return;
         }
         let chat = store.addChat(payload.userId, user.name, payload.roomId, payload.message);
@@ -92,11 +87,9 @@ function messageHandler(ws: connection, message: IncomingMessage) {
     if (message.type === SupportedMessage.UpvoteMessage) {
         const payload = message.payload;
         const chat = store.upvote(payload.userId, payload.roomId, payload.chatId);
-        console.log("inside upvote")
         if (!chat) {
             return;
         }
-        console.log("inside upvote 2")
 
         const outgoingPayload: OutgoingMessage= {
             type: OutgoingSupportedMessages.UpdateChat,
@@ -107,7 +100,6 @@ function messageHandler(ws: connection, message: IncomingMessage) {
             }
         }
 
-        console.log("inside upvote 3")
         userManager.broadcast(payload.roomId, payload.userId, outgoingPayload);
     }
 }
