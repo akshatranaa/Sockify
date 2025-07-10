@@ -26,7 +26,7 @@ const ChatApp = () => {
   }, []);
 
   const connectWebSocket = () => {
-    const websocket = new WebSocket('ws://localhost:8080', 'echo-protocol');
+    const websocket = new WebSocket('ws://sockify-el5z.onrender.com', 'echo-protocol');
     
     websocket.onopen = () => {
       setConnected(true);

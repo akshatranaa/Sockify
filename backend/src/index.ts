@@ -63,7 +63,6 @@ function messageHandler(ws: connection, message: IncomingMessage) {
         const user = userManager.getUser(payload.roomId, payload.userId);
 
         if (!user) {
-            .error("User not found in the db");
             return;
         }
         let chat = store.addChat(payload.userId, user.name, payload.roomId, payload.message);
