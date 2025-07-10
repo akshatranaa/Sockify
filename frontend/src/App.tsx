@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Send } from 'lucide-react';
 
 const ChatApp = () => {
-  const [ws, setWs] = useState(null);
-  const [connected, setConnected] = useState(false);
-  const [name, setName] = useState('');
-  const [userId, setUserId] = useState('');
-  const [roomId, setRoomId] = useState('');
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [joined, setJoined] = useState(false);
-  const messagesEndRef = useRef(null);
+  const [ws, setWs] = useState<any>(null);
+  const [connected, setConnected] = useState<any>(false);
+  const [name, setName] = useState<any>('');
+  const [userId, setUserId] = useState<any>('');
+  const [roomId, setRoomId] = useState<any>('');
+  const [message, setMessage] = useState<any>('');
+  const [messages, setMessages] = useState<any>([]);
+  const [joined, setJoined] = useState<any>(false);
+  const messagesEndRef = useRef<any>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -26,7 +26,7 @@ const ChatApp = () => {
   }, []);
 
   const connectWebSocket = () => {
-    const wsUrl =  'ws://localhost:8080';
+    const wsUrl =  'wss://sockify-el5z.onrender.com';
     const websocket = new WebSocket(wsUrl, 'echo-protocol');
     
     websocket.onopen = () => {
@@ -38,9 +38,9 @@ const ChatApp = () => {
       const data = JSON.parse(event.data);
       
       if (data.type === 'ADD_CHAT') {
-        setMessages(prev => [...prev, data.payload]);
+        setMessages((prev: any) => [...prev, data.payload]);
       } else if (data.type === 'UPDATE_CHAT') {
-        setMessages(prev => prev.map(msg => 
+        setMessages((prev: any) => prev.map((msg: any) => 
           msg.chatId === data.payload.chatId 
             ? { ...msg, upvotes: data.payload.upvotes }
             : msg
@@ -54,7 +54,7 @@ const ChatApp = () => {
       setJoined(false);
     };
 
-    websocket.onerror = (error) => {
+    websocket.onerror = () => {
     };
   };
 
@@ -94,17 +94,14 @@ const ChatApp = () => {
       name,
       upvotes: 0
     };
-    setMessages(prev => [...prev, localMessage]);
+    setMessages((prev: any) => [...prev, localMessage]);
     
     ws.send(JSON.stringify(messageData));
     setMessage('');
   };
 
-  const upvoteMessage = (chatId) => {
-    // Remove upvote functionality
-  };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: any) => {
     if (e.key === 'Enter') {
       if (!joined) {
         joinRoom();
@@ -216,7 +213,7 @@ const ChatApp = () => {
                 <p className="text-gray-500">No messages yet. Start the conversation!</p>
               </div>
             ) : (
-              messages.map((msg, index) => {
+              messages.map((msg: any, index: any) => {
                 const isMyMessage = msg.name === name;
                 return (
                   <div key={msg.chatId || index} className={`flex ${isMyMessage ? 'justify-end' : 'justify-start'}`}>
